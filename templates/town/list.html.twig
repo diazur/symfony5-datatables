@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}French Towns{% endblock %}
+
+{% block stylesheets %}
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1 class="mb-4">French Towns Plus Datatables</h1>
+
+    <table id="towns_dt_table" class="display">
+      <thead>
+        <tr>
+          <th>Town</th>
+          <th>Postal Code</th>
+          <th>Department</th>
+          <th>Region</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+  </div>
+
+  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.js"></script>
+  <script>
+      let table = new DataTable('#towns_dt_table', {
+          "columnDefs": [
+              // These are the column name variables that will be sent to the server
+              { "name": "name", "targets": 0 },
+              { "name": "postalCode", "targets": 1 },
+              { "name": "department", "targets": 2 },
+              { "name": "region", "targets": 3 },
+          ],
+          // Server-side parameters
+          "processing": true,
+          "serverSide": true,
+          // Ajax call
+          "ajax": {
+              "url": "{{ path('app_datatable_list') }}",
+              "type": "POST"
+          },
+          // Classic DataTables parameters
+          "paging" : true,
+          "info" : true,
+          "searching": true,
+          "pageLength": 10,
+          "order": [[2, 'asc']]
+      });
+  </script>
+{% endblock %}
+
