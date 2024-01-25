@@ -58,16 +58,36 @@ class TownRepository extends ServiceEntityRepository
             ->leftJoin('town.department', 'department')
             ->leftJoin('department.region', 'region');
 
-        // Search
-        if ( $search['value'] != '' ) {
-            $where = 'town.name LIKE :searchTerm'
-                . ' OR town.postalCode LIKE :searchTerm'
-                . ' OR department.name LIKE :searchTerm'
-                . ' OR region.name LIKE :searchTerm';
-            $query->andWhere($where);
-            $query->setParameter('searchTerm', '%'.$search['value'].'%');
-            $countQuery->andWhere($where);
-            $countQuery->setParameter('searchTerm', '%'.$search['value'].'%');
+        // Fields Search
+        foreach ($columns as $i => $column)
+        {
+            if ($column['search']['value'] != '')
+            {
+                // $searchValue is what we are looking for
+                $searchValue = $column['search']['value'];
+                $where = '';
+
+                // $column['name'] is the name of the column as sent by the JS
+                if ( $column['name'] == 'name' ) {
+                    $where = 'town.name LIKE :param'.$i;
+                }
+                else if ( $column['name'] == 'postalCode' ) {
+                    $where = 'town.postalCode LIKE :param'.$i;
+                }
+                else if ( $column['name'] == 'department' ) {
+                    $where = 'department.name LIKE :param'.$i;
+                }
+                else if ( $column['name'] == 'region' ) {
+                    $where = 'region.name LIKE :param'.$i;
+                }
+
+                if ( $where ) {
+                    $query->andWhere($where);
+                    $query->setParameter('param'.$i, '%'.$searchValue.'%');
+                    $countQuery->andWhere($where);
+                    $countQuery->setParameter('param'.$i, '%'.$searchValue.'%');
+                }
+            }
         }
 
         // Order

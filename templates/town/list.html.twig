@@ -3,8 +3,23 @@
 {% block title %}French Towns{% endblock %}
 
 {% block stylesheets %}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+  <style>
+    :focus::placeholder {
+        color:transparent;
+    }
+    /* Hide default search box */
+    .dataTables_filter {
+        display: none;
+    }
+    /* Move tfood in the upper part of the table */
+    tfoot {
+        display: table-header-group;
+        background-color: #ddd;
+    }
+  </style>
 {% endblock %}
 
 {% block body %}
@@ -20,6 +35,14 @@
           <th>Region</th>
         </tr>
       </thead>
+      <tfoot>
+        <tr>
+          <th>Town</th>
+          <th>Postal Code</th>
+          <th>Department</th>
+          <th>Region</th>
+        </tr>
+      </tfoot>
       <tbody></tbody>
     </table>
 
@@ -49,6 +72,30 @@
           "searching": true,
           "pageLength": 10,
           "order": [[2, 'asc']]
+      });
+
+      // Add a text input to each footer cell
+      var pos = 1;
+      $('#towns_dt_table tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( "<input id='input" + pos + "' type='text' class='form-control' placeholder='&#xf002;' style='font-family:Arial, FontAwesome; width:100%'/>" );
+
+          pos ++;
+      });
+
+      // Apply the search
+      pos = 1;
+      table.columns().every( function () {
+          var that = this;
+          $("#input"+pos).on( 'keyup change', function () {
+              if ( that.search() !== this.value )
+              {
+                  that
+                      .search( this.value )
+                      .draw();
+              }
+          });
+          pos++;
       });
   </script>
 {% endblock %}
