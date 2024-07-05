@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}French Towns{% endblock %}
+
+{% block stylesheets %}
+  <!-- DataTables CSS Bootstrap 4 -->
+  <!-- link href="https://cdn.datatables.net/v/bs4/dt-1.13.8/datatables.min.css" rel="stylesheet" -->
+  <link rel="stylesheet" href="{{ asset('datatables/bs4/datatables.min.css') }}">
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <h1 class="mb-4">French Towns Plus Datatables</h1>
+
+    <table id="towns_dt_table" class="table table-striped table-bordered">
+    <thead>
+        <tr>
+          <th>Town</th>
+          <th>Postal Code</th>
+          <th>Department</th>
+          <th>Region</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>Features</h3>
+    <ul>
+      <li>Server-side processing is enabled</li>
+      <li>Styling - Bootstrap 4</li>
+      <li>French language</li>
+    </ul>
+
+  </div>
+
+  <!-- script src="https://cdn.datatables.net/v/bs4/dt-1.13.8/datatables.min.js"></script -->
+  <script src="{{ asset('datatables/bs4/datatables.min.js') }}"></script>
+  <script>
+      let table = new DataTable('#towns_dt_table', {
+          "columnDefs": [
+              // These are the column name variables that will be sent to the server
+              { "name": "name", "targets": 0 },
+              { "name": "postalCode", "targets": 1 },
+              { "name": "department", "targets": 2 },
+              { "name": "region", "targets": 3 },
+          ],
+          // Server-side parameters
+          "processing": true,
+          "serverSide": true,
+          // Ajax call
+          "ajax": {
+              "url": "{{ path('app_datatable_list') }}",
+              "type": "POST"
+          },
+          // language
+          language: {
+              //url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json',
+              url: '{{ asset('datatables/fr-FR.json') }}'
+          },
+          // Classic DataTables parameters
+          "paging" : true,
+          "info" : true,
+          "searching": true,
+          "pageLength": 10,
+          "order": [[2, 'asc']]
+      });
+  </script>
+{% endblock %}
+

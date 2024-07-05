@@ -4,12 +4,13 @@
 
 {% block stylesheets %}
   <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+  {# <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />  #}
+  <link rel="stylesheet" href="{{ asset('datatables/jquery.dataTables.css') }}">
 {% endblock %}
 
 {% block body %}
   <div class="container">
-    <h1 class="mb-4">French Towns Plus Datatables</h1>
+    <h1 class="mb-4">French Towns</h1>
 
     <table id="towns_dt_table" class="display">
       <thead>
@@ -23,9 +24,16 @@
       <tbody></tbody>
     </table>
 
+    <h3>Features</h3>
+    <ul>
+      <li>Server-side processing is enabled</li>
+      <li>Default styling - jquery.dataTables.css</li>
+    </ul>
+
   </div>
 
-  <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.js"></script>
+  {# <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.js"></script> #}
+  <script src="{{ asset('datatables/jquery.dataTables.js') }}"></script>
   <script>
       let table = new DataTable('#towns_dt_table', {
           "columnDefs": [
@@ -40,7 +48,7 @@
           "serverSide": true,
           // Ajax call
           "ajax": {
-              "url": "{{ path('app_datatable_list') }}",
+              "url": "{{ path('app_basic_datatable_list') }}",
               "type": "POST"
           },
           // Classic DataTables parameters

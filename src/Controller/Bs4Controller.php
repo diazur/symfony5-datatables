@@ -8,18 +8,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TownController extends AbstractController
+class Bs4Controller extends AbstractController
 {
     /**
-     * @Route("/town", name="app_town_list")
+     * @Route("/bs4/towns", name="app_bs4_town_list")
      */
     public function list(): Response
     {
-        return $this->render('town/list.html.twig');
+        return $this->render('bs4/list.html.twig');
     }
 
     /**
-     * @Route("/town/datatable-list", name="app_datatable_list", methods={"POST"})
+     * @Route("/bs4/datatable-list", name="app_datatable_list", methods={"POST"})
      */
     public function datatableList(Request $request, TownRepository $repository): Response
     {

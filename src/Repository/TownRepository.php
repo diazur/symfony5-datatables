@@ -118,7 +118,7 @@ class TownRepository extends ServiceEntityRepository
         $totalFiltered = $countQuery->getQuery()->getSingleScalarResult();
 
         return array(
-            "records" 		  => $records,
+            "records"       => $records,
             "totalFiltered" => $totalFiltered
         );
     }
